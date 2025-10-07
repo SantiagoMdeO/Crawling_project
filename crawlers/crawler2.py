@@ -5,7 +5,9 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 import csv
 
-def crawl(seed_url, max_depth=2, verified_domains_file="verified_domains.txt", connections_file="connections.csv"):
+#i just modified this, so before running make an attempt to see if it does send the file to the correct directory
+
+def crawl(seed_url, max_depth=2, verified_domains_file="verified_domains.txt", connections_file="../neo4j/data/connections2.csv"):
     to_visit = [(seed_url, 0)]
     visited = set()
     verified_domains = set()
