@@ -1,0 +1,5 @@
+outs:
+- md5: 5e66e0c29d0928ba3280004c30e7f28f
+  size: 27549563
+  hash: md5
+  path: connections.csv
