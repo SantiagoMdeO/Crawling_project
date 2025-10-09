@@ -1,4 +1,3 @@
-#this document was provided by Pablo camarillo, but ive analyzed it and understood it.
 version: "3"
 services:
   spark-master:
@@ -7,25 +6,31 @@ services:
       - "9090:8080"
       - "7077:7077"
     volumes:
-       - ./notebooks:/opt/spark/work-dir
-       - ./data:/opt/spark/work-dir/data
+      - ./notebooks:/opt/spark/work-dir
+      - ./data:/opt/spark/work-dir/data
     environment:
       - SPARK_LOCAL_IP=spark-master
       - PYTHONPATH=/opt/spark/work-dir/lib
+    networks:
+      - sparknet
+
   spark-worker:
     image: spark-worker:latest
     depends_on:
       - spark-master
     environment:
       - SPARK_MASTER=spark://spark-master:7077
-      - SPARK_WORKER_CORES=1 #modified this from 1
-      - SPARK_WORKER_MEMORY=2G #modified this from 1
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=2G
       - SPARK_DRIVER_MEMORY=128m
       - SPARK_EXECUTOR_MEMORY=256m
       - PYTHONPATH=/opt/spark/work-dir/lib
     volumes:
-       - ./notebooks:/opt/spark/work-dir
-       - ./data:/opt/spark/work-dir/data
+      - ./notebooks:/opt/spark/work-dir
+      - ./data:/opt/spark/work-dir/data
+    networks:
+      - sparknet
+
   spark-notebook:
     image: jupyter-notebook:latest
     depends_on:
@@ -36,5 +41,11 @@ services:
       - "8888:8888"
       - "4040:4040"
     volumes:
-       - ./notebooks:/opt/spark/work-dir
-       - ./data:/opt/spark/work-dir/data
+      - ./notebooks:/opt/spark/work-dir
+      - ./data:/opt/spark/work-dir/data
+    networks:
+      - sparknet
+
+networks:
+  sparknet:
+    external: true

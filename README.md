@@ -14,12 +14,17 @@ git commit -m "Initial Raw Data"
 i and :wq
 
 
-docker compose up --scale spark-worker=1 -d
+
+
+docker network create sparknet
 
 docker run -d --restart always 
 --publish=7474:7474 --publish=7687:7687 
 --env NEO4J_AUTH=neo4j/neo4j@1234 
 --volume=data_neo4j:/data 
 --name neo4j-iteso 
---network spark_default 
+--network sparknet 
 neo4j:2025.09.0
+
+
+docker compose up --scale spark-worker=1 -d
